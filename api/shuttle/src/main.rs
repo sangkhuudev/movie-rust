@@ -13,7 +13,7 @@ async fn version(
     pool: web::Data<PgPool>,
 ) -> String {
     let result: Result<String, sqlx::Error> = sqlx::query_scalar(
-        "SELECT verion()"
+        "SELECT version()"
     )
     .fetch_one(pool.get_ref())
     .await;
