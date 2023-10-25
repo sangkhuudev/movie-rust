@@ -1,29 +1,8 @@
-use actix_web::{get, web, web::ServiceConfig};
+use actix_web::{web, web::ServiceConfig};
 use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
 use sqlx::{PgPool,Executor};
-
-#[get("/")]
-async fn hello_world() -> &'static str {
-    "Hello World!"
-}
-
-#[get("/version")]
-async fn version(
-    pool: web::Data<PgPool>,
-) -> String {
-    tracing::info!("Getting version");
-    let result: Result<String, sqlx::Error> = sqlx::query_scalar(
-        "SELECT version()"
-    )
-    .fetch_one(pool.get_ref())
-    .await;
-
-    match result {
-        Ok(version) => version,
-        Err(e) => format!("Error: {:?}", e) 
-    }
-}
+use api_lib::health::{hello_world,version};
 
 #[shuttle_runtime::main]
 async fn actix_web(
