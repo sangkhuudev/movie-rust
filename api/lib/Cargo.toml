@@ -13,3 +13,6 @@ tracing = "0.1.40"
 
 [dev-dependencies]
 actix-rt = "2.9.0"
+
+# shared
+shared = { path = "../../shared" }
