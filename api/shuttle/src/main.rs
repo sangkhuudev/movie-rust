@@ -14,12 +14,12 @@ async fn actix_web(
         .map_err(CustomError::new)?;
 
     let film_repository = PostgresFilmRepository::new(pool);
-    let film_repository: web::Data::<Box<dyn FilmRepository>> = web::Data::new(Box::new(film_repository));
+    let film_repository = web::Data::new(film_repository);
 
     let config = move |cfg: &mut ServiceConfig| {
         cfg.app_data(film_repository)
             .configure(health::service)
-            .configure(films::service);
+            .configure(films::service::<PostgresFilmRepository>);
     };
 
     Ok(config.into())
