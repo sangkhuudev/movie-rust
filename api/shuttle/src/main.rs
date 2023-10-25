@@ -2,7 +2,7 @@ use actix_web::{web, web::ServiceConfig};
 use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
 use sqlx::{PgPool,Executor};
-use api_lib::health::{health};
+use api_lib::health;
 
 #[shuttle_runtime::main]
 async fn actix_web(
@@ -16,7 +16,7 @@ async fn actix_web(
 
     let config = move |cfg: &mut ServiceConfig| {
         cfg.app_data(pool)
-            .service(health);
+            .configure(health::service);
     };
 
     Ok(config.into())
