@@ -12,6 +12,7 @@ async fn hello_world() -> &'static str {
 async fn version(
     pool: web::Data<PgPool>,
 ) -> String {
+    tracing::info!("Getting version");
     let result: Result<String, sqlx::Error> = sqlx::query_scalar(
         "SELECT version()"
     )
