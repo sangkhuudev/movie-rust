@@ -1,7 +1,11 @@
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(
+    Serialize, Deserialize, Debug, 
+    Clone, PartialEq, Eq, 
+    PartialOrd, Ord, Default)
+]
 pub struct Film {
     pub id: Uuid,
     pub title: String,
@@ -12,7 +16,11 @@ pub struct Film {
     pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(
+    Serialize, Deserialize, Debug, 
+    Clone, PartialEq, Eq, 
+    PartialOrd, Ord, Default)
+]
 pub struct CreateFilm {
     pub title: String,
     pub director: String,
