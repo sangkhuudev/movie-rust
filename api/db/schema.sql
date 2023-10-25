@@ -1,5 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE TABLE IF NOT EXISTS fimls (
+CREATE TABLE IF NOT EXISTS films (
     id uuid DEFAULT uuid_generate_v4() NOT NULL CONSTRAINT films_pkey PRIMARY KEY,
     title text NOT NULL,
     director text NOT NULL,

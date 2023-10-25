@@ -3,7 +3,7 @@ use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
 use sqlx::{PgPool,Executor};
 use api_lib::{health, films};
-use api_lib::film_repo::PostgresFilmRepository;
+use api_lib::film_repo::{PostgresFilmRepository, FilmRepository};
 
 #[shuttle_runtime::main]
 async fn actix_web(
@@ -14,7 +14,7 @@ async fn actix_web(
         .map_err(CustomError::new)?;
 
     let film_repository = PostgresFilmRepository::new(pool);
-    let film_repository = web::Data::new(film_repository);
+    let film_repository: web::Data::<Box<dyn FilmRepository>> = web::Data::new(Box::new(film_repository));
 
     let config = move |cfg: &mut ServiceConfig| {
         cfg.app_data(film_repository)
