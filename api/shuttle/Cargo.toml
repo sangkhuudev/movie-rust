@@ -7,9 +7,12 @@ edition = "2021"
 api-lib = {path ="../lib"}
 
 actix-web = "4.3.1"
-shuttle-actix-web = "0.30.0"
-shuttle-runtime = "0.30.0"
+shuttle-actix-web = "0.30.1"
+shuttle-runtime = "0.30.1"
 shuttle-shared-db = { version = "0.30.1", features = ["postgres"] }
 sqlx = { version = "0.7.2", default-features = false, features = [ "runtime-tokio-native-tls","macros", "postgres", "uuid", "chrono", "json" ] }
 tokio = "1.26.0"
 tracing = "0.1.40"
+# static
+actix-files = "0.6.2"
+# shuttle-static-folder = "0.28.0"
