@@ -22,7 +22,7 @@ script = '''
 rm -rf api/shuttle/static static
 mkdir api/shuttle/static
 mkdir static
-cd front
+cd frontend
 dioxus build --release
 # local development 
 cp -r dist/* ../api/shuttle/static

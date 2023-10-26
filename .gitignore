@@ -1,2 +1,7 @@
 target/
+dist/
 Secrets*.toml
+.env
+node_modules
+api.http
+static/
