@@ -5,8 +5,12 @@ mod components;
 mod models;
 
 use components::{Footer, Header, FilmModal};
+use models::FilmModalVisibility;
 
 fn App(cx: Scope) -> Element {
+    use_shared_state_provider(cx,|| FilmModalVisibility(false));
+    let is_modal_visible = use_shared_state::<FilmModalVisibility>(cx).unwrap();
+
     cx.render(rsx! {
         div {
             "Hello Rust"
@@ -20,7 +24,9 @@ fn App(cx: Scope) -> Element {
             Footer {}
             FilmModal {
                 on_create_or_update: move |_| {},
-                on_cancel: move |_| {},
+                on_cancel: move |_| {
+                    is_modal_visible.write().0 = false;
+                },
             }
         }
     })
