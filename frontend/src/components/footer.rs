@@ -10,8 +10,8 @@ pub fn Footer(cx: Scope) -> Element {
                 target: "_blank",
                 img {
                     class: "h-full w-auto",
-                    alt: "DevBcn",
-                    src: "devbcn.png",
+                    alt: "ubuntu",
+                    src: "Ubuntu.jpg",
                     "loading": "lazy"
                 }
             }
@@ -33,8 +33,8 @@ pub fn Footer(cx: Scope) -> Element {
                 target: "_blank",
                 img {
                     class: "h-full w-auto",
-                    alt: "BcnRust",
-                    src: "bcnrust.png",
+                    alt: "rust1",
+                    src: "rust1.jpg",
                     "loading": "lazy"
                 }
             }

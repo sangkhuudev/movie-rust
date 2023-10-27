@@ -2,8 +2,9 @@
 use dioxus::prelude::*;
 
 mod components;
+mod models;
 
-use components::{Footer, Header};
+use components::{Footer, Header, FilmModal};
 
 fn App(cx: Scope) -> Element {
     cx.render(rsx! {
@@ -17,6 +18,10 @@ fn App(cx: Scope) -> Element {
                 class: "md:container md:mx-auto md:py-8 flex-1",
             }
             Footer {}
+            FilmModal {
+                on_create_or_update: move |_| {},
+                on_cancel: move |_| {},
+            }
         }
     })
 }
