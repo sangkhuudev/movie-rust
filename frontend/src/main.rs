@@ -35,17 +35,6 @@ fn App(cx: Scope) -> Element {
     let selected_film = use_state::<Option<Film>>(cx, || None);
     let force_get_films = use_state(cx, || ());
 
-    {
-        let films = films.clone();
-        use_effect(cx, force_get_films, |_| async move {
-            let existing_films = get_films().await;
-            if existing_films.is_empty() {
-                films.set(None);
-            } else {
-                films.set(Some(existing_films));
-            }
-        });
-    }
 
     // Delete film
     let delete_film = move |filmId| {
@@ -105,6 +94,18 @@ fn App(cx: Scope) -> Element {
         });
     };
     
+    // {
+    //     let films = films.clone();
+    //     use_effect(cx, force_get_films, |_| async move {
+    //         let existing_films = get_films().await;
+    //         if existing_films.is_empty() {
+    //             films.set(None);
+    //         } else {
+    //             films.set(Some(existing_films));
+    //         }
+    //     });
+    // }
+
     cx.render(rsx! {
         main {
             class: "relative z-0 bg-blue-100 w-screen h-auto min-h-screen flex flex-col justify-start items-stretch",
