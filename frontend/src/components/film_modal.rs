@@ -1,12 +1,15 @@
 use dioxus::prelude::*;
-
+use uuid::Uuid;
+use shared::models::Film;
 use crate::components::Button;
 use crate::models::{ButtonType, FilmModalVisibility};
 
 #[derive(Props)]
 pub struct FilmModalProps<'a> {
-    on_create_or_update: EventHandler<'a, MouseEvent>,
+    on_create_or_update: EventHandler<'a, Film>,
     on_cancel: EventHandler<'a, MouseEvent>,
+    #[props(!optional)]
+    film: Option<Film>,
 }
 
 pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
@@ -15,6 +18,16 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
     if !is_modal_visible.read().0 {
         return None;
     }
+
+    let draft_film = use_state::<Film>(cx, || Film {
+        title: "".to_string(),
+        poster: "".to_string(),
+        director: "".to_string(),
+        year: 1900,
+        id: Uuid::new_v4(),
+        created_at: None,
+        updated_at: None,
+    });
     cx.render(rsx!(
         article {
             class: "z-50 w-full h-full fixed top-0 right-0 bg-gray-800 bg-opacity-50 flex flex-col justify-center items-center",
@@ -39,6 +52,13 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                             class: "w-full border border-gray-300 rounded-lg p-2",
                             "type": "text",
                             placeholder: "Enter film title",
+                            value: "{draft_film.get().title}",
+                            oninput: move |evt| {
+                                draft_film.set(Film {
+                                    title: evt.value.clone(),
+                                    ..draft_film.get().clone()
+                                })
+                            }
                         }
                     }
                     div {
@@ -51,6 +71,13 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                             class: "w-full border border-gray-300 rounded-lg p-2",
                             "type": "text",
                             placeholder: "Enter film director",
+                            value: "{draft_film.get().director}",
+                            oninput: move |evt| {
+                                draft_film.set(Film {
+                                    director: evt.value.clone(),
+                                    ..draft_film.get().clone()
+                                })
+                            }
                         }
                     }
                     div {
@@ -63,6 +90,13 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                             class: "w-full border border-gray-300 rounded-lg p-2",
                             "type": "number",
                             placeholder: "Enter film year",
+                            value: "{draft_film.get().year.to_string()}",
+                            oninput: move |evt| {
+                                draft_film.set(Film {
+                                    year: evt.value.clone().parse::<u16>().unwrap_or(1900),
+                                    ..draft_film.get().clone()
+                                })
+                            }
                         }
                     }
                     div {
@@ -75,6 +109,13 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                             class: "w-full border border-gray-300 rounded-lg p-2",
                             "type": "text",
                             placeholder: "Enter film poster URL",
+                            value: "{draft_film.get().poster}",
+                            oninput: move |evt| {
+                                draft_film.set(Film {
+                                    poster: evt.value.clone(),
+                                    ..draft_film.get().clone()
+                                })
+                            }
                         }
                     }
                 }
@@ -83,6 +124,15 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                     Button {
                         button_type: ButtonType::Secondary,
                         onclick: move |evt| {
+                            draft_film.set(Film {
+                                title: "".to_string(),
+                                poster: "".to_string(),
+                                director: "".to_string(),
+                                year: 1900,
+                                id: Uuid::new_v4(),
+                                created_at: None,
+                                updated_at: None,
+                            });
                             cx.props.on_cancel.call(evt)
                         },
                         "Cancel"
@@ -90,7 +140,16 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                     Button {
                         button_type: ButtonType::Primary,
                         onclick: move |evt| {
-                            cx.props.on_create_or_update.call(evt);
+                            cx.props.on_create_or_update.call(draft_film.get().clone());
+                            draft_film.set(Film {
+                                title: "".to_string(),
+                                poster: "".to_string(),
+                                director: "".to_string(),
+                                year: 1900,
+                                id: Uuid::new_v4(),
+                                created_at: None,
+                                updated_at: None,
+                            });
                         },
                         "Save film"
                     }
