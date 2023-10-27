@@ -3,6 +3,7 @@ use crate::{
     components::Button,
     models::{ButtonType, FilmModalVisibility},
 };
+
 pub fn Header(cx: Scope) -> Element {
     let is_modal_visible = use_shared_state::<FilmModalVisibility>(cx).unwrap();
     cx.render( rsx!{

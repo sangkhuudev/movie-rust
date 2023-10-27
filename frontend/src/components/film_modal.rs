@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
 use uuid::Uuid;
 use shared::models::Film;
+
 use crate::components::Button;
 use crate::models::{ButtonType, FilmModalVisibility};
 
@@ -15,10 +16,6 @@ pub struct FilmModalProps<'a> {
 pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
     let is_modal_visible = use_shared_state::<FilmModalVisibility>(cx).unwrap();
 
-    if !is_modal_visible.read().0 {
-        return None;
-    }
-
     let draft_film = use_state::<Film>(cx, || Film {
         title: "".to_string(),
         poster: "".to_string(),
@@ -28,6 +25,29 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
         created_at: None,
         updated_at: None,
     });
+
+    {
+        let draft_film = draft_film.clone();
+        use_effect(cx, &cx.props.film, |film| async move {
+            match film {
+                Some(film) => draft_film.set(film),
+                None => draft_film.set(Film {
+                    title: "".to_string(),
+                    poster: "".to_string(),
+                    director: "".to_string(),
+                    year: 1900,
+                    id: Uuid::new_v4(),
+                    created_at: None,
+                    updated_at: None,
+                }),
+            }
+        })
+    }
+
+    if !is_modal_visible.read().0 {
+        return None;
+    }
+
     cx.render(rsx!(
         article {
             class: "z-50 w-full h-full fixed top-0 right-0 bg-gray-800 bg-opacity-50 flex flex-col justify-center items-center",
@@ -139,7 +159,7 @@ pub fn FilmModal<'a>(cx: Scope<'a, FilmModalProps>) -> Element<'a> {
                     }
                     Button {
                         button_type: ButtonType::Primary,
-                        onclick: move |evt| {
+                        onclick: move |_| {
                             cx.props.on_create_or_update.call(draft_film.get().clone());
                             draft_film.set(Film {
                                 title: "".to_string(),

@@ -12,3 +12,6 @@ log = "0.4.20"
 wasm-logger = "0.2.0"
 shared = { path = "../shared" }
 uuid = { version = "1.5.0", features = ["serde", "v4", "js"] }
+reqwest = { version = "0.11.22", features = ["json"] }
+web-sys = "0.3.64"
+serde = { version = "1.0.190", features = ["derive"] }
